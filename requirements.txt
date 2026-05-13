@@ -4,3 +4,4 @@ SQLAlchemy
 PyYAML
 boto3
 python-dotenv
+aws-msk-iam-sasl-signer

@@ -23,7 +23,7 @@ def collect_topic_watermark(consumer, topics_metadata):
 
             topic_partition = TopicPartition(topic_name, partition_id)
 
-            low,high = consumer.get_watermark_offsets(topic_partition, topic_partition=10)
+            low,high = consumer.get_watermark_offsets(topic_partition, timeout=10)
             partition_watermarks.append({"partition_id": partition_id, "low_watermark": low, "high_watermark": high})
             total_high_watermark += high
 

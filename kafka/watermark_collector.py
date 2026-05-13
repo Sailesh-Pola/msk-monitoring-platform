@@ -19,7 +19,7 @@ def collect_topic_watermark(consumer, topics_metadata):
         total_high_watermark = 0
         partition_watermarks = []
 
-        for partition_id in range(topic["partitions_count"]):
+        for partition_id in range(topic["partition_count"]):
 
             topic_partition = TopicPartition(topic_name, partition_id)
 

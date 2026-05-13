@@ -1,0 +1,11 @@
+clusters:
+  - name: cluster-a
+
+    bootstrap_servers:
+      -b-1.loanmgt.rm74d5.c1.kafka.us-east-1.amazonaws.com:9098
+      -b-2.loanmgt.rm74d5.c1.kafka.us-east-1.amazonaws.com:9098
+      -b-3.loanmgt.rm74d5.c1.kafka.us-east-1.amazonaws.com:9098
+
+    monitoring:
+      inactivity_hours: 6
+      low_volume_threshold: 100

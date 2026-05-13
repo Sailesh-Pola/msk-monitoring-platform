@@ -1,5 +1,3 @@
-from ensurepip import bootstrap
-
 from utils.config_loader import load_config
 from kafka.admin_client import create_admin_client
 from kafka.topic_collector import collect_topics

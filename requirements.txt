@@ -1,0 +1,6 @@
+confluent-kafka
+psycopg2-binary
+SQLAlchemy
+PyYAML
+boto3
+python-dotenv

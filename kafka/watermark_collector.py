@@ -27,7 +27,7 @@ def collect_topic_watermark(consumer, topics_metadata):
             partition_watermarks.append({"partition_id": partition_id, "low_watermark": low, "high_watermark": high})
             total_high_watermark += high
 
-        topic_watermarks.extend({"topic_name": topic_name, "total_high_watermark": total_high_watermark, "partition_watermarks": partition_watermarks})
+        topic_watermarks.append({"topic_name": topic_name, "total_high_watermark": total_high_watermark, "partition_watermarks": partition_watermarks})
 
     return topic_watermarks
 

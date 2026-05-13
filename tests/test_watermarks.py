@@ -8,7 +8,7 @@ from kafka.watermark_collector import create_consumer, collect_topic_watermark
 
 config = load_config()
 
-cluster = config["cluster"][0]
+cluster = config["clusters"][0]
 bootstrap_servers = cluster["bootstrap_servers"]
 
 admin_client = create_admin_client(bootstrap_servers)

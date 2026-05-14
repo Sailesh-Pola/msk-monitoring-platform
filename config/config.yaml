@@ -2,7 +2,8 @@ clusters:
   - name: grupo-cluster
 
     bootstrap_servers:
-     - localhost:9094
+     - b-1.mskpfmiddlewarecluster.pb07l9.c7.kafka.us-east-1.amazonaws.com:9094
+     - b-2.mskpfmiddlewarecluster.pb07l9.c7.kafka.us-east-1.amazonaws.com:9094
 
     security:
       protocol: SSL

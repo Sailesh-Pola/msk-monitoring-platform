@@ -5,10 +5,10 @@ from kafka.topic_collector import collect_topics
 
 from kafka.watermark_collector import create_consumer, collect_topic_watermark
 
-from database.postgres_manager import SessionLocal
+from archive.postgres_manager import SessionLocal
 
-from database.repositories.topic_repository import insert_topic_snapshot
-from database.repositories.watermark_repository import insert_partition_offset
+from archive.repositories.topic_repository import insert_topic_snapshot
+from archive.repositories.watermark_repository import insert_partition_offset
 
 def main():
     config = load_config()

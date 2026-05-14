@@ -1,11 +1,21 @@
 clusters:
-  - name: cluster-a
+  - name: grupo-cluster
 
     bootstrap_servers:
-      - b-1.loanmgt.rm74d5.c1.kafka.us-east-1.amazonaws.com:9098
-      - b-2.loanmgt.rm74d5.c1.kafka.us-east-1.amazonaws.com:9098
-      - b-3.loanmgt.rm74d5.c1.kafka.us-east-1.amazonaws.com:9098
+      - b-1.mskmwcluster.du0adx.c25.kafka.us-east-1.amazonaws.com:9094
+      - b-2.mskmwcluster.du0adx.c25.kafka.us-east-1.amazonaws.com:9094
+
+    security:
+      protocol: SSL
+
+      ssl:
+        ca_location: "C:/Users/spola/OneDrive - Purpose Financial Services, Inc/Desktop/msk-monitoring-platform/config/certs/CARoot.pem"
+        certificate_location: "C:/Users/spola/OneDrive - Purpose Financial Services, Inc/Desktop/msk-monitoring-platform/config/certs/certificate.pem"
+        key_location: "C:/Users/spola/OneDrive - Purpose Financial Services, Inc/Desktop/msk-monitoring-platform/config/certs/key.pem"
 
     monitoring:
       inactivity_hours: 6
       low_volume_threshold: 100
+
+    storage:
+      sqlite_path: storage/msk_monitor.db

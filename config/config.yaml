@@ -2,16 +2,16 @@ clusters:
   - name: grupo-cluster
 
     bootstrap_servers:
-      - b-1.mskmwcluster.du0adx.c25.kafka.us-east-1.amazonaws.com:9094
-      - b-2.mskmwcluster.du0adx.c25.kafka.us-east-1.amazonaws.com:9094
+     - localhost:9094
 
     security:
       protocol: SSL
 
       ssl:
-        ca_location: "C:/Users/spola/OneDrive - Purpose Financial Services, Inc/Desktop/msk-monitoring-platform/config/certs/CARoot.pem"
-        certificate_location: "C:/Users/spola/OneDrive - Purpose Financial Services, Inc/Desktop/msk-monitoring-platform/config/certs/certificate.pem"
-        key_location: "C:/Users/spola/OneDrive - Purpose Financial Services, Inc/Desktop/msk-monitoring-platform/config/certs/key.pem"
+        ca_location: "../config/certs/CARoot.pem"
+        certificate_location: "../config/certs/certificate.pem"
+        key_location: "../config/certs/key.pem"
+        endpoint_identification_algorithm: "none"
 
     monitoring:
       inactivity_hours: 6

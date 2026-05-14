@@ -16,6 +16,8 @@ def build_kafka_consumer(cluster_config):
             config["ssl.certificate.location"] = ssl_config.get("certificate_location")
 
             config["ssl.key.location"] = ssl_config.get("key_location")
+            endpoint_alg = ssl_config.get("endpoint_identification_algorithm") or "none"
+            config["ssl.endpoint.identification.algorithm"] = str(endpoint_alg)
 
     return config
 

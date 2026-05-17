@@ -7,11 +7,13 @@ from kafka.watermark_collector import  collect_topic_watermark
 def main():
     config = load_config()
 
-    admin_client = create_admin_client(config)
+    cluster = config["clusters"][0]
+
+    admin_client = create_admin_client(cluster)
+
+    consumer = create_consumer(cluster)
 
     topics = collect_topics(admin_client)
-
-    consumer = create_consumer(config)
 
     watermarks = collect_topic_watermark(consumer, topics)
 

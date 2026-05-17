@@ -1,11 +1,4 @@
-from confluent_kafka import Consumer, TopicPartition
-from aws_msk_iam_sasl_signer import MSKAuthTokenProvider
-
-
-def oauth_cb(config):
-    """OAuth callback for MSK IAM authentication."""
-    auth_token, expiry_ms = MSKAuthTokenProvider.generate_auth_token('us-east-1')
-    return auth_token, expiry_ms / 1000
+from confluent_kafka import  TopicPartition
 
 def collect_topic_watermark(consumer, topics_metadata):
     topic_watermarks = []

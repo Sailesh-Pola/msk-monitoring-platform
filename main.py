@@ -3,7 +3,8 @@ from utils.config_loader import load_config
 from kafka.admin_client import create_admin_client
 from kafka.topic_collector import collect_topics
 
-from kafka.watermark_collector import create_consumer, collect_topic_watermark
+from kafka.watermark_collector import  collect_topic_watermark
+from kafka.client_factory import create_consumer
 
 from archive.postgres_manager import SessionLocal
 
@@ -13,15 +14,14 @@ from archive.repositories.watermark_repository import insert_partition_offset
 def main():
     config = load_config()
 
-    cluster = config["clusters"][0]
-    cluster_name = cluster["name"]
-    bootstrap_servers = cluster["bootstrap_servers"]
+    cluster_config = config["clusters"][0]
+    cluster_name = cluster_config["name"]
     run_time = datetime.now()
-    admin_client = create_admin_client(bootstrap_servers)
+    admin_client = create_admin_client(cluster_config)
 
     topics = collect_topics(admin_client)
 
-    consumer = create_consumer(bootstrap_servers)
+    consumer = create_consumer(cluster_config)
 
     watermarks = collect_topic_watermark(consumer, topics)
 

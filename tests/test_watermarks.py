@@ -1,19 +1,15 @@
 from utils.config_loader import load_config
-from kafka.admin_client import create_admin_client
 from kafka.topic_collector import collect_topics
-
-from kafka.watermark_collector import create_consumer, collect_topic_watermark
+from kafka.client_factory import create_consumer, create_admin_client
+from kafka.watermark_collector import  collect_topic_watermark
 
 config = load_config()
 
-cluster = config["clusters"][0]
-bootstrap_servers = cluster["bootstrap_servers"]
-
-admin_client = create_admin_client(bootstrap_servers)
+admin_client = create_admin_client(config)
 
 topics = collect_topics(admin_client)
 
-consumer = create_consumer(bootstrap_servers)
+consumer = create_consumer(config)
 
 watermarks = collect_topic_watermark(consumer, topics)
 

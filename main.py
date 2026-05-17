@@ -10,10 +10,10 @@ from storage.sqlite_manager import get_connection
 
 from storage.topic_repository import insert_topic_snapshot
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 def main():
     config = load_config()
-    cluster_config = config["cluster"][0]
+    cluster_config = config["clusters"][0]
     cluster_name = cluster_config["name"]
     db_path = os.path.join(BASE_DIR, cluster_config["storage"]["sqlite_path"])
     connection = get_connection(db_path)

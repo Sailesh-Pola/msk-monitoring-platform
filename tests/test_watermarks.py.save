@@ -1,0 +1,51 @@
+from utils.config_loader import load_config
+from kafka.topic_collector import collect_topics
+from kafka.client_factory import create_consumer, create_admin_client
+from kafka.watermark_collector import  collect_topic_watermark
+
+
+def main():
+    config = load_config()
+
+    cluster = config["clusters"][0]
+    
+    ssl = cluster["security"]["ssl"]
+
+    admin_client = create_admin_client(cluster)
+
+    [ec2-user@ip-10-102-28-43 msk-monitoring-platform]$ $env:PYTHONPATH="."; python3 -m tests.test_watermarks
+-bash: :PYTHONPATH=.: command not found
+Traceback (most recent call last):
+  File "/usr/lib64/python3.9/runpy.py", line 197, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/usr/lib64/python3.9/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/home/ec2-user/sailesh-folder/msk-monitoring-platform/tests/test_watermarks.py", line 33, in <module>
+    main()
+  File "/home/ec2-user/sailesh-folder/msk-monitoring-platform/tests/test_watermarks.py", line 10, in main
+    admin_client = create_admin_client(config)
+  File "/home/ec2-user/sailesh-folder/msk-monitoring-platform/kafka/client_factory.py", line 25, in create_admin_client
+    config = build_kafka_consumer(cluster_config)
+  File "/home/ec2-user/sailesh-folder/msk-monitoring-platform/kafka/client_factory.py", line 6, in build_kafka_consumer
+    "bootstrap.servers": ",".join(cluster_config["bootstrap_servers"])
+KeyError: 'bootst
+    topics = collect_topics(admin_client)
+
+    watermarks = collect_topic_watermark(consumer, topics)
+
+    for topic in watermarks:
+        print(f"\ntopic: {topic['topic_name']}")
+        print(
+            f"Total high watermark: " f"{topic['total_high_watermark']}"
+        )
+        for partition in topic["partition_watermarks"]:
+
+            print(
+                f"Partition {partition['partition_id']} "
+                f"-> High: {partition['high_watermark']} "
+            )
+
+    consumer.close()
+
+if __name__ == "__main__":
+    main()

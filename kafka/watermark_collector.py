@@ -7,6 +7,7 @@ def collect_topic_watermark(consumer, topics_metadata):
 
         topic_name = topic["topic_name"]
         total_high_watermark = 0
+        total_low_watermark = 0
         partition_watermarks = []
 
         for partition_id in range(topic["partition_count"]):
@@ -15,9 +16,11 @@ def collect_topic_watermark(consumer, topics_metadata):
 
             low,high = consumer.get_watermark_offsets(topic_partition, timeout=10)
             partition_watermarks.append({"partition_id": partition_id, "low_watermark": low, "high_watermark": high})
+            total_low_watermark += low
             total_high_watermark += high
 
-        topic_watermarks.append({"topic_name": topic_name, "total_high_watermark": total_high_watermark, "partition_watermarks": partition_watermarks})
+        topic_watermarks.append({"topic_name": topic_name, "total_high_watermark": total_high_watermark,"total_low_watermark": total_low_watermark,
+                                 "estimated_message_count":total_high_watermark-total_low_watermark,"partition_watermarks": partition_watermarks})
 
     return topic_watermarks
 

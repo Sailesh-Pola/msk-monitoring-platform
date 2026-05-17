@@ -1,50 +1,38 @@
+import os
 from datetime import datetime
 from utils.config_loader import load_config
-from kafka.admin_client import create_admin_client
 from kafka.topic_collector import collect_topics
 
 from kafka.watermark_collector import  collect_topic_watermark
-from kafka.client_factory import create_consumer
+from kafka.client_factory import create_consumer, create_admin_client
 
-from archive.postgres_manager import SessionLocal
+from storage.sqlite_manager import get_connection
 
-from archive.repositories.topic_repository import insert_topic_snapshot
-from archive.repositories.watermark_repository import insert_partition_offset
+from storage.topic_repository import insert_topic_snapshot
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def main():
     config = load_config()
-
-    cluster_config = config["clusters"][0]
+    cluster_config = config["cluster"][0]
     cluster_name = cluster_config["name"]
-    run_time = datetime.now()
+    db_path = os.path.join(BASE_DIR, cluster_config["storage"]["sqlite_path"])
+    connection = get_connection(db_path)
     admin_client = create_admin_client(cluster_config)
-
-    topics = collect_topics(admin_client)
-
     consumer = create_consumer(cluster_config)
-
+    topics = collect_topics(admin_client)
     watermarks = collect_topic_watermark(consumer, topics)
+    run_timestamp = datetime.utcnow().isoformat()
 
-    session = SessionLocal()
+    for topic in watermarks:
+        matching_topic = next(t for t in topics if t["topic_name"] == topic["topic_name"])
+        insert_topic_snapshot(connection= connection, cluster_name= cluster_name,run_timestamp= run_timestamp, topic_name=topic["topic_name"],
+                              partition_count=matching_topic["partition_count"], total_low_watermark=topic["total_low_watermark"],
+                              total_high_watermark=topic["total_high_watermark"], estimated_message_count=topic["estimated_message_count"])
 
-    try:
-        for topic in topics:
-            watermark_data = next(item for item in watermarks if item["topic_name"] == topic["topic_name"])
-            insert_topic_snapshot(session=session, cluster_name=cluster_name, run_time=run_time, topic_name=topic["topic_name"],
-                                  partition_count=topic["partition_count"],replication_factor=topic["replication_factor"],
-                                  total_high_watermark=watermark_data["total_high_watermark"])
+        print(f"stored metrics for topic:  {topic['topic_name']}")
 
-            for partition in watermark_data["partitions_watermarks"]:
-                insert_partition_offset(session=session, cluster_name=cluster_name, run_time=run_time, topic_name=topic["topic_name"],
-                                        partition_id=partition["partition_id"],low_watermark=partition["low_watermark"],high_watermark=partition["high_watermark"])
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        print(f"Error: {e}")
-
-    finally:
-        session.close()
-        consumer.close()
+    consumer.close()
+    connection.close()
 
 if __name__ == "__main__":
     main()
